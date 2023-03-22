@@ -1,0 +1,6 @@
+//> using scala "3.3.0-RC3"
+//> using lib "co.fs2::fs2-core:3.6.1"
+//> using plugin "com.github.ghik:::zerowaste:0.2.5"
+//> using options "-Wunused:imports"
+//> using options "-Werror"
+//> using options "-Wvalue-discard"
