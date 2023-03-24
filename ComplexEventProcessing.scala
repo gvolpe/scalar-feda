@@ -1,7 +1,7 @@
 import java.time.Instant
 import java.util.UUID
 
-import cats.{ Applicative, Id }
+import cats.Applicative
 import cats.effect.*
 import cats.syntax.all.*
 import fs2.Stream
@@ -68,7 +68,7 @@ object ComplexEventProcessing:
         }
 
   object PriceEngine1:
-    val fsm: FSM[Id, PriceState, PriceEvent, Unit] = FSM.id {
+    val fsm = FSM.id[PriceState, PriceEvent, Unit] {
       case (st, PriceEvent.Created(symbol, price, ts)) =>
         PriceState(st.prices.updated(symbol, PriceHistory.init(price, ts))) -> ()
       case (st, PriceEvent.Updated(symbol, price, ts)) =>
@@ -80,7 +80,7 @@ object ComplexEventProcessing:
     }
 
   class PriceEngine2[F[_]: Applicative](alerts: PriceAlerts[F]):
-    val fsm: FSM[F, PriceState, PriceEvent | Tick, Unit] = FSM {
+    val fsm = FSM[F, PriceState, PriceEvent | Tick, Unit] {
       case (st, PriceEvent.Created(symbol, price, ts)) =>
         (PriceState(st.prices.updated(symbol, PriceHistory.init(price, ts))) -> ()).pure[F]
       case (st, PriceEvent.Updated(symbol, price, ts)) =>
